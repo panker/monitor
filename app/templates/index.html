@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login Form</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <script src="static/js/jquery-3.2.1.min.js"></script>
+    <script src="static/js/react.js"></script>
+    <script src="static/js/react-dom.js"></script>
+
+    <script src="https://unpkg.com/react-router/umd/react-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <link href="static/index.css" rel="stylesheet"/>
+</head>
+<body>
+
+    <div class="login"></div>
+</body>
+<script type="text/babel" src="static/part/entry.js"></script>
+
+<script>
+    $('#submit').on('click',function () {
+        var name = $('input[name="u"]').val(),
+            pasw = $('input[name="p"]').val();
+        $.ajax({
+            type:"POST",
+            url:"login",
+            data:{username:name,password:pasw},
+            dataType:"json",
+            success:function (data) {
+                if(data){
+                    this.context.router.push({
+                        pathname:'/main',
+                        query:{
+                            id:2,
+                            name:'3243'
+                        }
+                    })
+                }
+            }
+        })
+    })
+</script>
+</html>
