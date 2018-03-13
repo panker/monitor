@@ -5,18 +5,25 @@ from flask_cors import CORS
 
 from config import config
 
+SQLALCHEMY_DATABASE_URI = 'mysql://root:admin@localhost:3306/monitor?charset=utf8'
+SQLALCHEMY_BINDS = {
+    'xsg_stat':        'mysql://pirate:admin@192.168.1.135:3306/xsg_stat?charset=utf8',
+    'xsg_ly':      'mysql://pirate:admin@192.168.1.135:3306/xsg_ly?charset=utf8'
+}
 db = SQLAlchemy()
-
-
 def create_app(config_name):
     app = Flask(__name__)
+
     app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+    app.config['SQLALCHEMY_BINDS'] = SQLALCHEMY_BINDS
+    #config[config_name].init_app(app)
+
+    db = SQLAlchemy(app)
 
     CORS(app , resources=r'/*')
 
-    db.init_app(app)
-    db.app = app
+    #db.app = app
 
     # 注册蓝本
     # 增加auth蓝本

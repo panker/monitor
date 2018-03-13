@@ -1,7 +1,9 @@
 from app.main import app_main
 from flask import render_template, request
 from app import db
+from sqlalchemy.orm import mapper
 import os
+import time
 import json
 
 @app_main.route('/index' , methods=['GET', 'POST'])
@@ -66,6 +68,30 @@ def getLogInfo():
     logInfo = LogInfo(gameId ,Ymd, 'MoneyFlow')
     logInfo.runShell()
 
+
+@app_main.route('/getCoreUser' , methods=['POST','GET'])
+def getCoreUser():
+    y = request.form.get('Y')
+    m = request.form.get('M')
+    d = request.form.get('D')
+    print y
+    print m
+    print d
+    Ymd = y+'-'+m+'-'+d
+    t_unix = int(time.mktime(time.strptime(Ymd,'%Y-%m-%d')))
+
+    from ..models.coreUser import CoreUser
+    from sqlalchemy import func
+
+    coreInfo = db.session.query(func.sum(CoreUser.num), func.substr(CoreUser.groupid, 1, 4) , CoreUser.created).filter(CoreUser.created>=t_unix).group_by(func.substr(CoreUser.groupid, 1, 4) , CoreUser.created).order_by(func.substr(CoreUser.groupid, 1, 4) , CoreUser.created).all()
+    arr = []
+    for list in coreInfo:
+        tmp = (str(list[0]) , list[1]+'0000', list[2])
+        arr.append(tmp)
+    print arr
+    return json.dumps(arr)
+
+
 def makeMenuTreeNode(menusDict):
     node_top = []
     childArr = []
@@ -107,4 +133,4 @@ def oneRow2dict(oneRow):
         node[row.name] = getattr(oneRow,row.name)
     return node
 
-getLogInfo()
+#getCoreUser()

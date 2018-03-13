@@ -6,10 +6,10 @@ class LogInfo():
         gameInfo = self.getGameInfo(gameId)
         gameCode = gameInfo.code
         log_server = gameInfo.log_server
-        self.shell_bash_10m = 'ssh pirate@'+log_server+' "find /home/pirate/log/udplog/'+gameCode+'/'+Ymd+' -name '+type+'.log|xargs wc -l|sort -t \'/\' -k 2"'
+        self.shell_bash_10m = 'ssh pirate@'+log_server+' "find /home/pirate/log/udplog/'+gameCode+'/'+Ymd+' -name '+type+'.log|xargs wc -l|sort -t \'/\' -k 2"'+"|sort -t '/' -k 2|awk -F '/' '{print $1,$(NF-1)}'"
 
     def runShell(self):
-        self.logInfo = os.popen(self.shell_bash_10m)
+        self.logInfo = os.system(self.shell_bash_10m)
         print u'%s' % (self.logInfo)
 
     def getLogInfoBy10m(self):

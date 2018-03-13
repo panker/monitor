@@ -4,15 +4,6 @@ from flask_script import Manager, Shell
 from app import create_app, db
 
 app = create_app('development')
-'''
-@app.route('/')
-def index():
-    return '<a href="login">logn</a>'
-
-@app.route('/login')
-def login():
-    return '<a href="www.baidu.com">logn</a>'
-'''
 manager = Manager(app)
 migrate = Migrate(app, db)
 
